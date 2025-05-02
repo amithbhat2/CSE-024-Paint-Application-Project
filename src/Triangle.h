@@ -21,6 +21,9 @@ public:
     // Movement and resizing methods
     void move(float dx, float dy);
     void resize(float factor);
+    
+    // Clone method implementation
+    Shape* clone() const;
 };
 
 #endif

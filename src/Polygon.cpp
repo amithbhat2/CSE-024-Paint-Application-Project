@@ -64,3 +64,15 @@ void Polygon::move(float dx, float dy) {
 void Polygon::resize(float factor) {
     size *= factor;
 }
+
+Shape* Polygon::clone() const {
+    Polygon* copy = new Polygon();
+    copy->x = this->x;
+    copy->y = this->y;
+    copy->size = this->size;
+    copy->sides = this->sides;
+    copy->r = this->r;
+    copy->g = this->g;
+    copy->b = this->b;
+    return copy;
+}

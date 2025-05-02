@@ -62,3 +62,15 @@ void Rectangle::resize(float scaleFactor) {
         height = 0.1;
     }
 }
+
+Shape* Rectangle::clone() const {
+    Rectangle* copy = new Rectangle();
+    copy->x = this->x;
+    copy->y = this->y;
+    copy->width = this->width;
+    copy->height = this->height;
+    copy->r = this->r;
+    copy->g = this->g;
+    copy->b = this->b;
+    return copy;
+}

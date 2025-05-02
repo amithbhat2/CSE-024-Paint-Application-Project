@@ -68,3 +68,14 @@ void Triangle::move(float dx, float dy) {
 void Triangle::resize(float factor) {
     size *= factor;
 }
+
+Shape* Triangle::clone() const {
+    Triangle* copy = new Triangle();
+    copy->x = this->x;
+    copy->y = this->y;
+    copy->size = this->size;
+    copy->r = this->r;
+    copy->g = this->g;
+    copy->b = this->b;
+    return copy;
+}

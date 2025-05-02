@@ -49,7 +49,6 @@ void Application::onCanvasMouseDown(bobcat::Widget* sender, float mx, float my) 
 
 void Application::onCanvasDrag(bobcat::Widget* sender, float mx, float my) {
     TOOL tool = toolbar->getTool();
-    Color color = colorSelector->getColor();
 
     if (tool == PENCIL) {
         // Update the current scribble with a new point
@@ -148,7 +147,6 @@ Application::Application() {
     ON_MOUSE_DOWN(canvas, Application::onCanvasMouseDown);
     ON_DRAG(canvas, Application::onCanvasDrag);
     ON_MOUSE_UP(canvas, Application::onCanvasMouseUp);
-    ON_KEY_DOWN(canvas, Application::onKeyDown);
     ON_CHANGE(toolbar, Application::onToolbarChange);
     ON_CHANGE(colorSelector, Application::onColorSelectorChange);
     
