@@ -61,6 +61,15 @@ void Toolbar::onClick(bobcat::Widget* sender) {
     else if (sender == clearButton) {
         action = CLEAR;
     }
+    else if (sender == frontButton) {
+        action = FRONT;
+    }
+    else if (sender == backButton) {
+        action = BACK;
+    }
+    else if (sender == undoButton) {
+        action = UNDO;
+    }
     else if (sender == mouseButton) {
         tool = MOUSE;
     }
@@ -82,6 +91,7 @@ ACTION Toolbar::getAction() const {
 }
 
 Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
+    // Note: Icons will need to be created for these new buttons
     pencilButton = new Image(x, y, 50, 50, "./assets/pencil.png");
     eraserButton = new Image(x, y + 50, 50, 50, "./assets/eraser.png");
     circleButton = new Image(x, y + 100, 50, 50, "./assets/circle.png");
@@ -90,6 +100,11 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     polygonButton = new Image(x, y + 250, 50, 50, "./assets/polygon.png");
     clearButton = new Image(x, y + 300, 50, 50, "./assets/clear.png");
     mouseButton = new Image(x, y + 350, 50, 50, "./assets/mouse.png");
+    
+    // If icons are not available, use text buttons instead
+    frontButton = new Button(x + 10, y + 350, 30, 20, "F");
+    backButton = new Button(x + 10, y + 370, 30, 20, "B");
+    undoButton = new Button(x + 10, y + 390, 30, 20, "U");
 
     tool = PENCIL;
     action = NONE;
@@ -102,6 +117,9 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     polygonButton->box(FL_BORDER_BOX);
     clearButton->box(FL_BORDER_BOX);
     mouseButton->box(FL_BORDER_BOX);
+    frontButton->box(FL_BORDER_BOX);
+    backButton->box(FL_BORDER_BOX);
+    undoButton->box(FL_BORDER_BOX);
 
     visualizeSelectedTool();
 
@@ -113,4 +131,7 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     ON_CLICK(polygonButton, Toolbar::onClick);
     ON_CLICK(clearButton, Toolbar::onClick);
     ON_CLICK(mouseButton, Toolbar::onClick);
+    ON_CLICK(frontButton, Toolbar::onClick);
+    ON_CLICK(backButton, Toolbar::onClick);
+    ON_CLICK(undoButton, Toolbar::onClick);
 }

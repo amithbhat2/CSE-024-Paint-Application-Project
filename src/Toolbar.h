@@ -13,6 +13,9 @@ class Toolbar : public bobcat::Group {
     bobcat::Image* polygonButton;
     bobcat::Image* clearButton;
     bobcat::Image* mouseButton;
+    bobcat::Button* frontButton;
+    bobcat::Button* backButton;
+    bobcat::Button* undoButton;
 
     TOOL tool;
     ACTION action;

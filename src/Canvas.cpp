@@ -10,10 +10,45 @@
 
 Canvas::Canvas(int x, int y, int w, int h) : Canvas_(x, y, w, h) {
     selectedShape = nullptr;
+    currentScribble = nullptr;
 }
 
 void Canvas::addPoint(float x, float y, float r, float g, float b, int size) {
+    // This function is used for individual points (for backward compatibility)
     points.push_back(new Point(x, y, r, g, b, size));
+}
+
+void Canvas::startScribble(float x, float y, float r, float g, float b, int size) {
+    // Create a new scribble and add the initial point
+    currentScribble = new Scribble(r, g, b, size);
+    currentScribble->addPoint(x, y);
+}
+
+void Canvas::updateScribble(float x, float y) {
+    // Add a point to the current scribble
+    if (currentScribble) {
+        currentScribble->addPoint(x, y);
+    }
+}
+
+void Canvas::endScribble() {
+    // Add the completed scribble to the shapes collection
+    if (currentScribble) {
+        shapes.push_back(currentScribble);
+        currentScribble = nullptr;
+    }
+}
+
+void Canvas::eraseAt(float x, float y) {
+    for (auto it = shapes.begin(); it != shapes.end(); ) {
+        if ((*it)->contains(x, y)) {
+            delete *it;
+            it = shapes.erase(it);
+            return; // Only erase one shape at a time
+        } else {
+            ++it;
+        }
+    }
 }
 
 void Canvas::addRectangle(float x, float y, float r, float g, float b) {
@@ -33,29 +68,31 @@ void Canvas::addPolygon(float x, float y, float r, float g, float b) {
 }
 
 void Canvas::bringToFront(Shape* shape) {
-
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
-
         shapes.erase(it);
-
         shapes.push_back(shape);
     }
 }
 
 void Canvas::sendToBack(Shape* shape) {
-
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
-
         shapes.erase(it);
-
         shapes.insert(shapes.begin(), shape);
     }
 }
 
-int Canvas::handle(int event) {
+// Store previous states for undo functionality
+void Canvas::saveState() {
+    // Not implemented yet
+}
 
+void Canvas::undo() {
+    // Not implemented yet
+}
+
+int Canvas::handle(int event) {
     int ret = Canvas_::handle(event);
 
     if (event == FL_KEYDOWN && selectedShape != nullptr) {
@@ -70,13 +107,11 @@ int Canvas::handle(int event) {
             redraw();
             return 1; 
         }
-
         else if (key == 'f' || key == 'F') {
             bringToFront(selectedShape);
             redraw();
             return 1; 
         }
-
         else if (key == 'b' || key == 'B') {
             sendToBack(selectedShape);
             redraw();
@@ -95,6 +130,8 @@ void Canvas::clear() {
         delete shapes[i];
     }
     shapes.clear();
+    currentScribble = nullptr;
+    selectedShape = nullptr;
 }
 
 void Canvas::render() {
@@ -103,6 +140,9 @@ void Canvas::render() {
     }
     for (unsigned int i = 0 ; i < shapes.size(); i++) {
         shapes[i]->draw();
+    }
+    if (currentScribble) {
+        currentScribble->draw();
     }
 }
 

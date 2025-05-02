@@ -58,8 +58,20 @@ int Point::getSize() const {
     return size;
 }
 
+void Point::setX(float x) {
+    this->x = x;
+}
+
+void Point::setY(float y) {
+    this->y = y;
+}
+
 void Point::setColor(float r, float g, float b) {
     this->r = r;
     this->g = g;
     this->b = b;
+}
+
+void Point::setSize(int size) {
+    this->size = size;
 }
