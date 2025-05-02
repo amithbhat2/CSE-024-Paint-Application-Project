@@ -4,9 +4,11 @@
 #include <bobcat_ui/all.h>
 #include <vector>
 #include "Shape.h"
+#include "Color.h"
 #include "Point.h"
 #include "Rectangle.h"
 #include "Circle.h"
+#include "Scribble.h"
 #include "Triangle.h"
 #include "Polygon.h"
 #include "Shape.h"
@@ -15,6 +17,8 @@ class Canvas : public bobcat::Canvas_ {
     std::vector<Point*> points;
     std::vector<Shape*> shapes;
     Shape* selectedShape;
+    Scribble* currentScribble;
+
 
 public:
     Canvas(int x, int y, int w, int h);
@@ -30,10 +34,22 @@ public:
     void addTriangle(float x, float y, float r, float g, float b);
 
     void addPolygon(float x, float y, float r, float g, float b);
+
+    void plus();
+
+    void minus();
+
+    void startScribble(float startX, float startY, Color color);
+
+    void updateScribble(float x, float y, float r, float g,  float b, int size);
+
+    void endScribble();
     
     void bringToFront(Shape* shape);
     
     void sendToBack(Shape* shape);
+
+    void undo();
 
     void clear();
 

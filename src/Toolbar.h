@@ -16,6 +16,7 @@ class Toolbar : public bobcat::Group {
 
     TOOL tool;
     ACTION action;
+    
     void deselectAllTools();
     void visualizeSelectedTool();
     void onClick(bobcat::Widget* sender);

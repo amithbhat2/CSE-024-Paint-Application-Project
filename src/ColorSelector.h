@@ -3,6 +3,7 @@
 
 #include <bobcat_ui/all.h>
 #include "Color.h"
+#include "Canvas.h"
 #include "Enums.h"
 
 class ColorSelector : public bobcat::Group {
@@ -13,6 +14,8 @@ class ColorSelector : public bobcat::Group {
     bobcat::Button* blueButton;
     bobcat::Button* indigoButton;
     bobcat::Button* violetButton;
+
+    Canvas *connectedCanvas;    
 
     COLOR color;
     void deselectAllColors();

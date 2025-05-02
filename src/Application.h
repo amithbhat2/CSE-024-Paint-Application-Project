@@ -13,7 +13,6 @@ class Application : public bobcat::Application_ {
     ColorSelector* colorSelector;
     Shape* selectedShape;
     
-    // Add variables for shape movement
     bool isDragging;
     float lastMouseX;
     float lastMouseY;
@@ -24,7 +23,6 @@ class Application : public bobcat::Application_ {
     void onToolbarChange(bobcat::Widget* sender);
     void onColorSelectorChange(bobcat::Widget* sender);
     
-    // Add methods for keyboard events
     void onKeyDown(bobcat::Widget* sender, int key);
 
 public:
@@ -32,6 +30,5 @@ public:
 
     friend struct::AppTest;
 };
-
 
 #endif

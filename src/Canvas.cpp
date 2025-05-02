@@ -1,8 +1,10 @@
 #include "Canvas.h"
+#include "Enums.h"
 #include "Circle.h"
 #include "Rectangle.h"
 #include "Triangle.h"
 #include "Polygon.h"
+#include "Scribble.h"
 #include <iostream>
 #include <algorithm>
 
@@ -31,59 +33,57 @@ void Canvas::addPolygon(float x, float y, float r, float g, float b) {
 }
 
 void Canvas::bringToFront(Shape* shape) {
-    // Find shape in the vector
+
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
-        // Remove from current position
+
         shapes.erase(it);
-        // Add to end (front of drawing order)
+
         shapes.push_back(shape);
     }
 }
 
 void Canvas::sendToBack(Shape* shape) {
-    // Find shape in the vector
+
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
-        // Remove from current position
+
         shapes.erase(it);
-        // Add to beginning (back of drawing order)
+
         shapes.insert(shapes.begin(), shape);
     }
 }
 
 int Canvas::handle(int event) {
-    // Call the base class handle method
+
     int ret = Canvas_::handle(event);
 
-    // Process keyboard events
     if (event == FL_KEYDOWN && selectedShape != nullptr) {
         int key = Fl::event_key();
 
-        // Resize with + and - keys
         if (key == '+' || key == '=') {
-            selectedShape->resize(1.1); // Increase size by 10%
+            selectedShape->resize(1.1); 
             redraw();
-            return 1; // Event was handled
+            return 1;
         } else if (key == '-' || key == '_') {
-            selectedShape->resize(0.9); // Decrease size by 10%
+            selectedShape->resize(0.9);
             redraw();
-            return 1; // Event was handled
+            return 1; 
         }
-        // Bring to front with F key
+
         else if (key == 'f' || key == 'F') {
             bringToFront(selectedShape);
             redraw();
-            return 1; // Event was handled
+            return 1; 
         }
-        // Send to back with B key
+
         else if (key == 'b' || key == 'B') {
             sendToBack(selectedShape);
             redraw();
-            return 1; // Event was handled
+            return 1; 
         }
     }
-    return ret; // Return the base class result
+    return ret; 
 }
 
 void Canvas::clear() {

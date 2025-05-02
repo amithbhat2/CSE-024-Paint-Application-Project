@@ -45,14 +45,20 @@ void Rectangle::setColor(float r, float g, float b) {
     this->b = b;
 }
 
-// Implement movement
 void Rectangle::move(float dx, float dy) {
     x += dx;
     y += dy;
 }
 
-// Implement resizing
-void Rectangle::resize(float factor) {
-    width *= factor;
-    height *= factor;
+void Rectangle::resize(float scaleFactor) {
+    width *= scaleFactor;
+    height *= scaleFactor;
+    
+    // Ensure the rectangle doesn't get too small
+    if (width < 0.1) {
+        width = 0.1;
+    }
+    if (height < 0.1) {
+        height = 0.1;
+    }
 }

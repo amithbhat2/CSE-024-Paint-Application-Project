@@ -33,10 +33,8 @@ void Circle::draw() {
 }
 
 bool Circle::contains(float mx, float my) {
-    // Check if point is inside circle using distance formula
-    float dx = mx - x;
-    float dy = my - y;
-    return (dx*dx + dy*dy) <= (radius*radius);
+    float distance = sqrt(pow(mx - x, 2) + pow(my - y, 2));
+    return distance <= radius;
 }
 
 void Circle::setColor(float r, float g, float b) {
@@ -45,13 +43,14 @@ void Circle::setColor(float r, float g, float b) {
     this->b = b;
 }
 
-// Implement movement
 void Circle::move(float dx, float dy) {
     x += dx;
     y += dy;
 }
 
-// Implement resizing
-void Circle::resize(float factor) {
-    radius *= factor;
+void Circle::resize(float scaleFactor) {
+    radius *= scaleFactor;
+    if (radius < 0.05) {
+        radius = 0.05;
+    }
 }

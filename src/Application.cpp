@@ -38,13 +38,11 @@ void Application::onCanvasMouseDown(bobcat::Widget* sender, float mx, float my) 
     else if (tool == MOUSE) {
         selectedShape = canvas->getSelectedShape(mx, my);
         
-        // If we selected a shape, start tracking for movement
         if (selectedShape) {
             isDragging = true;
             lastMouseX = mx;
             lastMouseY = my;
             
-            // Let the canvas take keyboard focus when a shape is selected
             canvas->take_focus();
         }
     }
@@ -79,7 +77,6 @@ void Application::onCanvasDrag(bobcat::Widget* sender, float mx, float my) {
 }
 
 void Application::onCanvasMouseUp(bobcat::Widget* sender, float mx, float my) {
-    // Stop dragging
     isDragging = false;
 }
 
@@ -104,9 +101,8 @@ void Application::onColorSelectorChange(bobcat::Widget* sender) {
 }
 
 
-
 Application::Application() {
-    window = new Window(25, 75, 400, 400, "Lecture 21");
+    window = new Window(25, 75, 400, 400, "Paint Application");
 
     selectedShape = nullptr;
     isDragging = false;
@@ -128,7 +124,6 @@ Application::Application() {
     ON_CHANGE(toolbar, Application::onToolbarChange);
     ON_CHANGE(colorSelector, Application::onColorSelectorChange);
     
-    // Register canvas to receive keyboard events
     canvas->take_focus();
 
     window->show();
