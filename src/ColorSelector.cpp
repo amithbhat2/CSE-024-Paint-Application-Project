@@ -36,7 +36,7 @@ void ColorSelector::visualizeSelectedColor() {
         violetButton->label("@+5square");
     }
     else if (color == BROWN) {
-        brownButton->label("@+square");
+        brownButton->label("@+5square");
     }
     else if (color == BLACK) {
         blackButton->label("@+5square");
@@ -67,7 +67,7 @@ void ColorSelector::onClick(bobcat::Widget* sender) {
     else if (sender == violetButton) {
         color = VIOLET;
     }
-    else if (color == BROWN) {
+    else if (sender == brownButton) {
         color = BROWN;
     }
     else if (sender == blackButton) {

@@ -1,4 +1,5 @@
 #include "Toolbar.h"
+#include <FL/Enumerations.H>
 using namespace bobcat;
 
 void Toolbar::deselectAllTools() {
@@ -34,6 +35,12 @@ void Toolbar::visualizeSelectedTool() {
     else if (tool == POLYGON) {
         polygonButton->color(FL_WHITE);
     }
+    else if (tool == FRONT) {
+        frontButton->color(FL_WHITE);
+    }
+    else if (tool == BACK) {
+        backButton->color(FL_WHITE);
+    }
     else if (tool == MOUSE) {
         mouseButton->color(FL_WHITE);
     }
@@ -67,12 +74,6 @@ void Toolbar::onClick(bobcat::Widget* sender) {
     }
     else if (sender == decreaseButton) {
         action = DECREASE;
-    }
-    else if (sender == frontButton) {
-        action = FRONT;
-    }
-    else if (sender == backButton) {
-        action = BACK;
     }
     else if (sender == undoButton) {
         action = UNDO;

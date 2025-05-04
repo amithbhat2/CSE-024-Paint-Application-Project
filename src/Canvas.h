@@ -38,7 +38,7 @@ public:
     void endScribble();
     void bringToFront(Shape* shape);
     void sendToBack(Shape* shape);
-
+    
     void undo();
     void clear();
     void render();
