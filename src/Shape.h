@@ -16,11 +16,6 @@ public:
     virtual void setColor(float r, float g, float b) = 0;
 
     virtual void move(float dx, float dy) = 0;
-    
-    virtual void resize(float factor) = 0;
-    
-    // New clone method to create deep copies for undo history
-    virtual Shape* clone() const = 0;
 
     // Since Shape contains at least one pure virtual function
     // Shape is an Abstract Data Type

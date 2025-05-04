@@ -49,28 +49,3 @@ void Rectangle::move(float dx, float dy) {
     x += dx;
     y += dy;
 }
-
-void Rectangle::resize(float scaleFactor) {
-    width *= scaleFactor;
-    height *= scaleFactor;
-    
-    // Ensure the rectangle doesn't get too small
-    if (width < 0.1) {
-        width = 0.1;
-    }
-    if (height < 0.1) {
-        height = 0.1;
-    }
-}
-
-Shape* Rectangle::clone() const {
-    Rectangle* copy = new Rectangle();
-    copy->x = this->x;
-    copy->y = this->y;
-    copy->width = this->width;
-    copy->height = this->height;
-    copy->r = this->r;
-    copy->g = this->g;
-    copy->b = this->b;
-    return copy;
-}

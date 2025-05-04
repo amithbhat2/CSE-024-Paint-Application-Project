@@ -9,13 +9,11 @@ void Application::onCanvasMouseDown(bobcat::Widget* sender, float mx, float my) 
     Color color = colorSelector->getColor();
 
     if (tool == PENCIL) {
-        // Start a new scribble
-        canvas->startScribble(mx, my, color.getR(), color.getG(), color.getB(), 7);
+        canvas->addPoint(mx, my, color.getR(), color.getG(), color.getB(), 10);
         canvas->redraw();
     }
     else if (tool == ERASER) {
-        // Erase any shape at the current position
-        canvas->eraseAt(mx, my);
+        canvas->addPoint(mx, my, 1.0, 1.0, 1.0, 14);
         canvas->redraw();
     }
     else if (tool == RECTANGLE) {
@@ -26,14 +24,17 @@ void Application::onCanvasMouseDown(bobcat::Widget* sender, float mx, float my) 
         canvas->addCircle(mx, my, color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
+
     else if (tool == TRIANGLE) {
         canvas->addTriangle(mx, my, color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
+
     else if (tool == POLYGON) {
         canvas->addPolygon(mx, my, color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
+
     else if (tool == MOUSE) {
         selectedShape = canvas->getSelectedShape(mx, my);
         
@@ -49,26 +50,22 @@ void Application::onCanvasMouseDown(bobcat::Widget* sender, float mx, float my) 
 
 void Application::onCanvasDrag(bobcat::Widget* sender, float mx, float my) {
     TOOL tool = toolbar->getTool();
+    Color color = colorSelector->getColor();
 
     if (tool == PENCIL) {
-        // Update the current scribble with a new point
-        canvas->updateScribble(mx, my);
+        canvas->addPoint(mx, my, color.getR(), color.getG(), color.getB(), 7);
         canvas->redraw();
     }
     else if (tool == ERASER) {
-        // Continue erasing shapes as the mouse is dragged
-        canvas->eraseAt(mx, my);
+        canvas->addPoint(mx, my, 1.0, 1.0, 1.0, 14);
         canvas->redraw();
     }
     else if (tool == MOUSE && isDragging && selectedShape) {
-        // Calculate the movement delta
         float dx = mx - lastMouseX;
         float dy = my - lastMouseY;
         
-        // Move the shape
         selectedShape->move(dx, dy);
         
-        // Update the last mouse position
         lastMouseX = mx;
         lastMouseY = my;
         
@@ -77,22 +74,7 @@ void Application::onCanvasDrag(bobcat::Widget* sender, float mx, float my) {
 }
 
 void Application::onCanvasMouseUp(bobcat::Widget* sender, float mx, float my) {
-    TOOL tool = toolbar->getTool();
-    
-    if (tool == PENCIL) {
-        // Finish and save the current scribble
-        canvas->endScribble();
-    }
-    
     isDragging = false;
-}
-
-void Application::onKeyDown(bobcat::Widget* sender, int key) {
-    if (key == FL_Control_L + 'z' || key == FL_Control_L + 'Z') {
-        // Handle Ctrl+Z for undo
-        canvas->undo();
-        canvas->redraw();
-    }
 }
 
 void Application::onToolbarChange(bobcat::Widget* sender) {
@@ -103,18 +85,11 @@ void Application::onToolbarChange(bobcat::Widget* sender) {
         selectedShape = nullptr;
         canvas->redraw();
     }
-    else if (action == FRONT && selectedShape) {
-        canvas->bringToFront(selectedShape);
-        canvas->redraw();
-    }
-    else if (action == BACK && selectedShape) {
-        canvas->sendToBack(selectedShape);
-        canvas->redraw();
-    }
     else if (action == UNDO) {
         canvas->undo();
         canvas->redraw();
     }
+
 }
 
 void Application::onColorSelectorChange(bobcat::Widget* sender) {
@@ -128,16 +103,16 @@ void Application::onColorSelectorChange(bobcat::Widget* sender) {
 }
 
 Application::Application() {
-    window = new Window(25, 75, 400, 400, "Paint Application");
+    window = new Window(25, 75, 600, 650, "Paint App Project");
 
     selectedShape = nullptr;
     isDragging = false;
     lastMouseX = 0;
     lastMouseY = 0;
 
-    toolbar = new Toolbar(0, 0, 50, 400);
-    canvas = new Canvas(50, 0, 350, 350);
-    colorSelector = new ColorSelector(50, 350, 350, 50);
+    toolbar = new Toolbar(0, 0, 50, 600);
+    canvas = new Canvas(50, 0, 500, 550);
+    colorSelector = new ColorSelector(50, 600, 450, 50);
     colorSelector->box(FL_BORDER_BOX);
 
     window->add(toolbar);

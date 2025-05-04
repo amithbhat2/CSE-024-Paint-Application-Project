@@ -8,6 +8,10 @@ void Toolbar::deselectAllTools() {
     triangleButton->color(FL_BACKGROUND_COLOR);
     rectangleButton->color(FL_BACKGROUND_COLOR);
     polygonButton->color(FL_BACKGROUND_COLOR);
+    plusButton->color(FL_BACKGROUND_COLOR);
+    minusButton->color(FL_BACKGROUND_COLOR);
+    frontButton->color(FL_BACKGROUND_COLOR);
+    backButton->color(FL_BACKGROUND_COLOR);
     mouseButton->color(FL_BACKGROUND_COLOR);
 }
 
@@ -29,6 +33,18 @@ void Toolbar::visualizeSelectedTool() {
     }
     else if (tool == POLYGON) {
         polygonButton->color(FL_WHITE);
+    }
+    else if (tool == PLUS) {
+        plusButton->color(FL_WHITE);
+    }
+    else if (tool == MINUS) {
+        minusButton->color(FL_WHITE);
+    }
+    else if (tool == FRONT) {
+        frontButton->color(FL_WHITE);
+    }
+    else if (tool == BACK) {
+        backButton->color(FL_WHITE);
     }
     else if (tool == MOUSE) {
         mouseButton->color(FL_WHITE);
@@ -58,17 +74,23 @@ void Toolbar::onClick(bobcat::Widget* sender) {
     else if (sender == polygonButton) {
         tool = POLYGON;
     }
-    else if (sender == clearButton) {
-        action = CLEAR;
+    else if (sender == plusButton) {
+        tool = PLUS;
+    }
+    else if (sender == minusButton) {
+        tool = MINUS;
     }
     else if (sender == frontButton) {
-        action = FRONT;
+        tool = FRONT;
     }
     else if (sender == backButton) {
-        action = BACK;
+        tool = BACK;
     }
     else if (sender == undoButton) {
         action = UNDO;
+    }
+    else if (sender == clearButton) {
+        action = CLEAR;
     }
     else if (sender == mouseButton) {
         tool = MOUSE;
@@ -91,20 +113,19 @@ ACTION Toolbar::getAction() const {
 }
 
 Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
-    // Note: Icons will need to be created for these new buttons
     pencilButton = new Image(x, y, 50, 50, "./assets/pencil.png");
     eraserButton = new Image(x, y + 50, 50, 50, "./assets/eraser.png");
     circleButton = new Image(x, y + 100, 50, 50, "./assets/circle.png");
     triangleButton = new Image(x, y + 150, 50, 50, "./assets/triangle.png");
     rectangleButton = new Image(x, y + 200, 50, 50, "./assets/rectangle.png");
     polygonButton = new Image(x, y + 250, 50, 50, "./assets/polygon.png");
-    clearButton = new Image(x, y + 300, 50, 50, "./assets/clear.png");
-    mouseButton = new Image(x, y + 350, 50, 50, "./assets/mouse.png");
-    
-    // If icons are not available, use text buttons instead
-    frontButton = new Button(x + 10, y + 350, 30, 20, "F");
-    backButton = new Button(x + 10, y + 370, 30, 20, "B");
-    undoButton = new Button(x + 10, y + 390, 30, 20, "U");
+    plusButton = new Image (x, y + 300, 50, 50, "./assets/plus.png");
+    minusButton = new Image (x, y + 350, 50, 50, "./assets/minus.png");
+    frontButton = new Image (x, y + 400, 50, 50, "./assets/bring-to-front.png");
+    backButton = new Image(x, y + 450, 50, 50, "./assets/send-to-back.png");
+    undoButton = new Image (x, y + 500, 50, 50, "./assets/undo.png");
+    clearButton = new Image(x, y + 550, 50, 50, "./assets/clear.png");
+    mouseButton = new Image(x, y + 600, 50, 50, "./assets/mouse.png");
 
     tool = PENCIL;
     action = NONE;
@@ -115,11 +136,14 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     triangleButton->box(FL_BORDER_BOX);
     rectangleButton->box(FL_BORDER_BOX);
     polygonButton->box(FL_BORDER_BOX);
-    clearButton->box(FL_BORDER_BOX);
-    mouseButton->box(FL_BORDER_BOX);
+    plusButton->box(FL_BORDER_BOX);
+    minusButton->box(FL_BORDER_BOX);
     frontButton->box(FL_BORDER_BOX);
     backButton->box(FL_BORDER_BOX);
     undoButton->box(FL_BORDER_BOX);
+    clearButton->box(FL_BORDER_BOX);
+    mouseButton->box(FL_BORDER_BOX);
+    
 
     visualizeSelectedTool();
 
@@ -129,9 +153,11 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     ON_CLICK(triangleButton, Toolbar::onClick);
     ON_CLICK(rectangleButton, Toolbar::onClick);
     ON_CLICK(polygonButton, Toolbar::onClick);
-    ON_CLICK(clearButton, Toolbar::onClick);
-    ON_CLICK(mouseButton, Toolbar::onClick);
+    ON_CLICK(plusButton, Toolbar::onClick);
+    ON_CLICK(minusButton, Toolbar::onClick);
     ON_CLICK(frontButton, Toolbar::onClick);
     ON_CLICK(backButton, Toolbar::onClick);
     ON_CLICK(undoButton, Toolbar::onClick);
+    ON_CLICK(clearButton, Toolbar::onClick);
+    ON_CLICK(mouseButton, Toolbar::onClick);
 }

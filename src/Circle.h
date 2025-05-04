@@ -19,10 +19,6 @@ public:
     void setColor(float r, float g, float b);
     
     void move(float dx, float dy);
-    void resize(float factor);
-    
-    // Clone method implementation
-    Shape* clone() const;
 };
 
 #endif

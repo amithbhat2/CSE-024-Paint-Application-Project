@@ -11,11 +11,13 @@ class Toolbar : public bobcat::Group {
     bobcat::Image* triangleButton;
     bobcat::Image* rectangleButton;
     bobcat::Image* polygonButton;
+    bobcat::Image* plusButton;
+    bobcat::Image* minusButton;
+    bobcat::Image* frontButton;
+    bobcat::Image* backButton;
+    bobcat::Image* undoButton;
     bobcat::Image* clearButton;
     bobcat::Image* mouseButton;
-    bobcat::Button* frontButton;
-    bobcat::Button* backButton;
-    bobcat::Button* undoButton;
 
     TOOL tool;
     ACTION action;

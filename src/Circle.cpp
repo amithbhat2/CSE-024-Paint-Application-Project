@@ -47,21 +47,3 @@ void Circle::move(float dx, float dy) {
     x += dx;
     y += dy;
 }
-
-void Circle::resize(float scaleFactor) {
-    radius *= scaleFactor;
-    if (radius < 0.05) {
-        radius = 0.05;
-    }
-}
-
-Shape* Circle::clone() const {
-    Circle* copy = new Circle();
-    copy->x = this->x;
-    copy->y = this->y;
-    copy->radius = this->radius;
-    copy->r = this->r;
-    copy->g = this->g;
-    copy->b = this->b;
-    return copy;
-}

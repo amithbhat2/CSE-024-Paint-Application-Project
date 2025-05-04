@@ -8,182 +8,61 @@
 #include <iostream>
 #include <algorithm>
 
-// Structure to represent a snapshot of the canvas state
-struct CanvasState {
-    std::vector<Shape*> shapes;
-    
-    // Deep copy constructor to clone shapes
-    CanvasState(const std::vector<Shape*>& sourceShapes) {
-        for (Shape* shape : sourceShapes) {
-            // We would need proper clone methods for each shape type
-            // For now, we'll just store pointers - this will be improved
-            shapes.push_back(shape);
-        }
-    }
-    
-    ~CanvasState() {
-        // In a proper implementation, we would delete shapes here
-        // But since we're just storing references for now, we won't
-    }
-};
-
 Canvas::Canvas(int x, int y, int w, int h) : Canvas_(x, y, w, h) {
     selectedShape = nullptr;
-    currentScribble = nullptr;
 }
 
 void Canvas::addPoint(float x, float y, float r, float g, float b, int size) {
-    // This function is used for individual points (for backward compatibility)
     points.push_back(new Point(x, y, r, g, b, size));
-    saveState();
-}
-
-void Canvas::startScribble(float x, float y, float r, float g, float b, int size) {
-    // Create a new scribble and add the initial point
-    currentScribble = new Scribble(r, g, b, size);
-    currentScribble->addPoint(x, y);
-}
-
-void Canvas::updateScribble(float x, float y) {
-    // Add a point to the current scribble
-    if (currentScribble) {
-        currentScribble->addPoint(x, y);
-    }
-}
-
-void Canvas::endScribble() {
-    // Add the completed scribble to the shapes collection
-    if (currentScribble) {
-        shapes.push_back(currentScribble);
-        currentScribble = nullptr;
-        saveState();
-    }
-}
-
-void Canvas::eraseAt(float x, float y) {
-    for (auto it = shapes.begin(); it != shapes.end(); ) {
-        if ((*it)->contains(x, y)) {
-            delete *it;
-            it = shapes.erase(it);
-            saveState();
-            return; // Only erase one shape at a time
-        } else {
-            ++it;
-        }
-    }
 }
 
 void Canvas::addRectangle(float x, float y, float r, float g, float b) {
     shapes.push_back(new Rectangle(x, y, r, g, b));
-    saveState();
 }
 
 void Canvas::addCircle(float x, float y, float r, float g, float b) {
     shapes.push_back(new Circle(x, y, r, g, b));
-    saveState();
 }
 
 void Canvas::addTriangle(float x, float y, float r, float g, float b) {
     shapes.push_back(new Triangle(x, y, r, g, b));
-    saveState();
 }
 
 void Canvas::addPolygon(float x, float y, float r, float g, float b) {
     shapes.push_back(new Polygon(x, y, r, g, b));
-    saveState();
 }
 
 void Canvas::bringToFront(Shape* shape) {
+
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
+
         shapes.erase(it);
+
         shapes.push_back(shape);
-        saveState();
     }
 }
 
 void Canvas::sendToBack(Shape* shape) {
+
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
+
         shapes.erase(it);
+
         shapes.insert(shapes.begin(), shape);
-        saveState();
     }
 }
 
-// Maximum history size to prevent excessive memory usage
-#define MAX_HISTORY_SIZE 20
-std::vector<CanvasState*> undoHistory;
-
-// Store previous states for undo functionality
-void Canvas::saveState() {
-    // Add current state to history
-    if (undoHistory.size() >= MAX_HISTORY_SIZE) {
-        delete undoHistory.front();
-        undoHistory.erase(undoHistory.begin());
-    }
-    
-    undoHistory.push_back(new CanvasState(shapes));
-    std::cout << "State saved. History size: " << undoHistory.size() << std::endl;
-}
-
-void Canvas::undo() {
-    if (undoHistory.size() > 1) {
-        // Remove current state
-        delete undoHistory.back();
-        undoHistory.pop_back();
-        
-        // Get previous state
-        CanvasState* previousState = undoHistory.back();
-        
-        // Clear current shapes
-        for (Shape* shape : shapes) {
-            delete shape;
-        }
-        shapes.clear();
-        
-        // Restore previous shapes
-        for (Shape* shape : previousState->shapes) {
-            // In a proper implementation, we would clone each shape
-            // For now, this will lead to double deletion issues
-            shapes.push_back(shape);
-        }
-        
-        // Clear selection
-        selectedShape = nullptr;
-        
-        std::cout << "Undo performed. History size: " << undoHistory.size() << std::endl;
-    } else {
-        std::cout << "Nothing to undo." << std::endl;
+void Canvas::undo(){
+    if (shapes.size() > 0){
+        delete shapes[shapes.size() - 1];
+        shapes.pop_back();
     }
 }
 
 int Canvas::handle(int event) {
     int ret = Canvas_::handle(event);
-
-    if (event == FL_KEYDOWN && selectedShape != nullptr) {
-        int key = Fl::event_key();
-
-        if (key == '+' || key == '=') {
-            selectedShape->resize(1.1); 
-            redraw();
-            return 1;
-        } else if (key == '-' || key == '_') {
-            selectedShape->resize(0.9);
-            redraw();
-            return 1; 
-        }
-        else if (key == 'f' || key == 'F') {
-            bringToFront(selectedShape);
-            redraw();
-            return 1; 
-        }
-        else if (key == 'b' || key == 'B') {
-            sendToBack(selectedShape);
-            redraw();
-            return 1; 
-        }
-    }
     return ret; 
 }
 
@@ -196,9 +75,6 @@ void Canvas::clear() {
         delete shapes[i];
     }
     shapes.clear();
-    currentScribble = nullptr;
-    selectedShape = nullptr;
-    saveState();
 }
 
 void Canvas::render() {
@@ -207,9 +83,6 @@ void Canvas::render() {
     }
     for (unsigned int i = 0 ; i < shapes.size(); i++) {
         shapes[i]->draw();
-    }
-    if (currentScribble) {
-        currentScribble->draw();
     }
 }
 
@@ -232,3 +105,4 @@ Shape* Canvas::getSelectedShape(float mx, float my) {
     }
     return result;
 }
+

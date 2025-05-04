@@ -14,6 +14,8 @@ class ColorSelector : public bobcat::Group {
     bobcat::Button* blueButton;
     bobcat::Button* indigoButton;
     bobcat::Button* violetButton;
+    bobcat::Button* brownButton;
+    bobcat::Button* blackButton;
 
     Canvas *connectedCanvas;    
 

@@ -20,12 +20,7 @@ public:
     bool contains(float mx, float my);
     void setColor(float r, float g, float b);
     
-    // Movement and resizing methods
     void move(float dx, float dy);
-    void resize(float factor);
-    
-    // Clone method implementation
-    Shape* clone() const;
 };
 
 #endif

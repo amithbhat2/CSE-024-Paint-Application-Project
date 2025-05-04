@@ -35,20 +35,20 @@ public:
 
     void addPolygon(float x, float y, float r, float g, float b);
 
-    void startScribble(float x, float y, float r, float g, float b, int size);
+    void plus();
 
-    void updateScribble(float x, float y);
+    void minus();
+
+    void startScribble(float startX, float startY, Color color);
+
+    void updateScribble(float x, float y, float r, float g,  float b, int size);
 
     void endScribble();
-    
-    void eraseAt(float x, float y);
     
     void bringToFront(Shape* shape);
     
     void sendToBack(Shape* shape);
 
-    void saveState();
-    
     void undo();
 
     void clear();

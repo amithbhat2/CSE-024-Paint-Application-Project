@@ -9,6 +9,8 @@ void ColorSelector::deselectAllColors() {
     blueButton->label("");
     indigoButton->label("");
     violetButton->label("");
+    brownButton->label("");
+    blackButton->label("");
 }
 
 void ColorSelector::visualizeSelectedColor() {
@@ -32,6 +34,12 @@ void ColorSelector::visualizeSelectedColor() {
     }
     else if (color == VIOLET) {
         violetButton->label("@+5square");
+    }
+    else if (color == BROWN) {
+        brownButton->label("@+square");
+    }
+    else if (color == BLACK) {
+        blackButton->label("@+5square");
     }
 }
 
@@ -58,6 +66,12 @@ void ColorSelector::onClick(bobcat::Widget* sender) {
     }
     else if (sender == violetButton) {
         color = VIOLET;
+    }
+    else if (color == BROWN) {
+        color = BROWN;
+    }
+    else if (sender == blackButton) {
+        color = BLACK;
     }
 
     if (onChangeCb) {
@@ -90,6 +104,12 @@ Color ColorSelector::getColor() const {
     else if (color == VIOLET) {
         return Color(148/255.0, 0/255.0, 211/255.0);
     }
+    else if (color == BROWN) {
+        return Color(155/255.0, 75/255.0, 0/255.0);
+    }
+    else if (color == BLACK) {
+        return Color(0/255.0, 0/255.0, 0/255.0);
+    }
     else {
         return Color();
     }
@@ -103,6 +123,8 @@ ColorSelector::ColorSelector(int x, int y, int w, int h) : Group(x, y, w, h) {
     blueButton = new Button(x + 200, y, 50, 50, "");
     indigoButton = new Button(x + 250, y, 50, 50, "");
     violetButton = new Button(x + 300, y, 50, 50, "");
+    brownButton = new Button(x + 350, y, 50, 50, "");
+    blackButton = new Button(x + 400, y, 50, 50, "");
 
     color = RED;
 
@@ -120,6 +142,10 @@ ColorSelector::ColorSelector(int x, int y, int w, int h) : Group(x, y, w, h) {
     indigoButton->labelcolor(FL_WHITE);
     violetButton->color(fl_rgb_color(148, 0, 211));
     violetButton->labelcolor(FL_WHITE);
+    brownButton->color(fl_rgb_color(150, 75, 0));
+    brownButton->labelcolor(FL_WHITE);
+    blackButton->color(fl_rgb_color(0, 0, 0));
+    blackButton->labelcolor(FL_WHITE);
 
     visualizeSelectedColor();
 
@@ -130,4 +156,6 @@ ColorSelector::ColorSelector(int x, int y, int w, int h) : Group(x, y, w, h) {
     ON_CLICK(blueButton, ColorSelector::onClick);
     ON_CLICK(indigoButton, ColorSelector::onClick);
     ON_CLICK(violetButton, ColorSelector::onClick);
+    ON_CLICK(brownButton, ColorSelector::onClick);
+    ON_CLICK(blackButton, ColorSelector::onClick);
 }
