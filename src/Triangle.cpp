@@ -57,3 +57,7 @@ void Triangle::move(float dx, float dy) {
     x += dx;
     y += dy;
 }
+
+void Triangle::resize(float scaleX, float scaleY) {
+    size *= (scaleX + scaleY) / 2.0f; 
+}

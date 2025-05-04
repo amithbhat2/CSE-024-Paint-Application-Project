@@ -47,3 +47,7 @@ void Circle::move(float dx, float dy) {
     x += dx;
     y += dy;
 }
+
+void Circle::resize(float scaleX, float scaleY) {
+    radius *= (scaleX + scaleY) / 2.0f; 
+}

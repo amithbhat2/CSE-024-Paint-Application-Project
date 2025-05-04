@@ -11,8 +11,8 @@ class Toolbar : public bobcat::Group {
     bobcat::Image* triangleButton;
     bobcat::Image* rectangleButton;
     bobcat::Image* polygonButton;
-    bobcat::Image* plusButton;
-    bobcat::Image* minusButton;
+    bobcat::Image* increaseButton;
+    bobcat::Image* decreaseButton;
     bobcat::Image* frontButton;
     bobcat::Image* backButton;
     bobcat::Image* undoButton;

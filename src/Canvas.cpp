@@ -105,4 +105,3 @@ Shape* Canvas::getSelectedShape(float mx, float my) {
     }
     return result;
 }
-

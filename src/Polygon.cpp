@@ -17,7 +17,7 @@ Polygon::Polygon(float x, float y, float r, float g, float b) {
     this->x = x;
     this->y = y;
     size = 0.2;
-    sides = 6; 
+    sides = 5; 
     this->r = r;
     this->g = g;
     this->b = b;
@@ -55,4 +55,8 @@ void Polygon::setColor(float r, float g, float b) {
 void Polygon::move(float dx, float dy) {
     x += dx;
     y += dy;
+}
+
+void Polygon::resize(float scaleX, float scaleY) {
+    size *= (scaleX + scaleY) / 2.0f;
 }

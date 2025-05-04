@@ -49,3 +49,8 @@ void Rectangle::move(float dx, float dy) {
     x += dx;
     y += dy;
 }
+
+void Rectangle::resize(float scaleX, float scaleY) {
+    width *= scaleX;
+    height *= scaleY;
+}

@@ -5,6 +5,7 @@
 #include "Toolbar.h"
 #include "Canvas.h"
 #include "ColorSelector.h"
+#include "Enums.h"
 
 class Application : public bobcat::Application_ {
     bobcat::Window* window;
@@ -12,7 +13,7 @@ class Application : public bobcat::Application_ {
     Canvas* canvas;
     ColorSelector* colorSelector;
     Shape* selectedShape;
-    
+
     bool isDragging;
     float lastMouseX;
     float lastMouseY;
@@ -26,7 +27,7 @@ class Application : public bobcat::Application_ {
 public:
     Application();
 
-    friend struct::AppTest;
+    friend struct AppTest;
 };
 
 #endif

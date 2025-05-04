@@ -84,6 +84,14 @@ void Application::onToolbarChange(bobcat::Widget* sender) {
         canvas->clear();
         selectedShape = nullptr;
         canvas->redraw();
+    }   
+    else if (action == INCREASE && selectedShape) {
+        selectedShape->resize(1.1f, 1.1f);
+        canvas->redraw();
+    }   
+    else if (action == DECREASE && selectedShape) {
+        selectedShape->resize(0.9f, 0.9f);
+        canvas->redraw();
     }
     else if (action == UNDO) {
         canvas->undo();
@@ -94,7 +102,6 @@ void Application::onToolbarChange(bobcat::Widget* sender) {
 
 void Application::onColorSelectorChange(bobcat::Widget* sender) {
     Color color = colorSelector->getColor();
-
     if (selectedShape) {
         cout << "Update selected shape color" << endl;
         selectedShape->setColor(color.getR(), color.getG(), color.getB());
@@ -110,8 +117,8 @@ Application::Application() {
     lastMouseX = 0;
     lastMouseY = 0;
 
-    toolbar = new Toolbar(0, 0, 50, 600);
-    canvas = new Canvas(50, 0, 500, 550);
+    toolbar = new Toolbar(0, 0, 50, 650);
+    canvas = new Canvas(50, 0, 550, 600);
     colorSelector = new ColorSelector(50, 600, 450, 50);
     colorSelector->box(FL_BORDER_BOX);
 
