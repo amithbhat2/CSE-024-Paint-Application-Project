@@ -17,6 +17,7 @@ public:
 
     void draw() const;
 
+    // Getters
     float getX() const;
     float getY() const;
     float getR() const;
@@ -24,11 +25,12 @@ public:
     float getB() const;
     int getSize() const;
 
-    void setX(float x);
-    void setY(float y);
-    void setColor(float r, float g, float b);
-    void setSize(int size);
+    // Add these simple setters:
+    void setX(float x) { this->x = x; }
+    void setY(float y) { this->y = y; }
+    void setSize(int size) { this->size = size; }
 
+    void setColor(float r, float g, float b);
 };
 
 #endif

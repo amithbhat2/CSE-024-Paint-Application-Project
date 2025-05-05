@@ -10,6 +10,7 @@
 
 Canvas::Canvas(int x, int y, int w, int h) : Canvas_(x, y, w, h) {
     selectedShape = nullptr;
+    currentScribble = nullptr;
 }
 
 void Canvas::addPoint(float x, float y, float r, float g, float b, int size) {
@@ -24,84 +25,108 @@ void Canvas::addCircle(float x, float y, float r, float g, float b) {
     shapes.push_back(new Circle(x, y, r, g, b));
 }
 
-void Canvas::addTriangle(float x, float y, float r, float g, float b) {
-    shapes.push_back(new Triangle(x, y, r, g, b));
+void Canvas::addTriangle(float x, float y, float base, float height, float r, float g, float b) {
+    shapes.push_back(new Triangle(x, y, base, height, r, g, b));
 }
 
-void Canvas::addPolygon(float x, float y, float r, float g, float b) {
-    shapes.push_back(new Polygon(x, y, r, g, b));
+void Canvas::addPolygon(float x, float y, int sides, float length, float r, float g, float b) {
+    shapes.push_back(new Polygon(x, y, sides, length, r, g, b));
+}
+
+void Canvas::removeShape(Shape* shape) {
+    auto it = std::find(shapes.begin(), shapes.end(), shape);
+    if (it != shapes.end()) {
+        // Clear selection if this was the selected shape
+        if (selectedShape == *it) {
+            selectedShape = nullptr;
+        }
+        delete *it;  // Free memory
+        shapes.erase(it);
+    }
 }
 
 void Canvas::bringToFront(Shape* shape) {
-
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
-
         shapes.erase(it);
-
         shapes.push_back(shape);
     }
 }
 
 void Canvas::sendToBack(Shape* shape) {
-
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
-
         shapes.erase(it);
-
         shapes.insert(shapes.begin(), shape);
     }
 }
 
-void Canvas::undo(){
-    if (shapes.size() > 0){
-        delete shapes[shapes.size() - 1];
+void Canvas::undo() {
+    if (!shapes.empty()) {
+        delete shapes.back();
         shapes.pop_back();
     }
 }
 
 int Canvas::handle(int event) {
-    int ret = Canvas_::handle(event);
-    return ret; 
+    return Canvas_::handle(event);
 }
 
 void Canvas::clear() {
-    for (unsigned int i = 0 ; i < points.size(); i++) {
-        delete points[i];
+    // Clear points
+    for (auto point : points) {
+        delete point;
     }
     points.clear();
-    for (unsigned int i = 0 ; i < shapes.size(); i++) {
-        delete shapes[i];
+    
+    // Clear shapes
+    for (auto shape : shapes) {
+        delete shape;
     }
     shapes.clear();
+    
+    selectedShape = nullptr;
 }
 
 void Canvas::render() {
-    for (unsigned int i = 0 ; i < points.size(); i++) {
-        points[i]->draw();
+    // Draw points
+    for (auto point : points) {
+        point->draw();
     }
-    for (unsigned int i = 0 ; i < shapes.size(); i++) {
-        shapes[i]->draw();
+    
+    // Draw shapes
+    for (auto shape : shapes) {
+        shape->draw();
     }
 }
 
-Shape* Canvas::getSelectedShape(float mx, float my) {
-    Shape* result = nullptr;
+// Scribble methods implementation
+void Canvas::startScribble(float startX, float startY, Color color) {
+    currentScribble = new Scribble(startX, startY, color.getR(), color.getG(), color.getB());
+}
 
-    // Iterate in reverse order to get the top-most shape first
-    for (int i = shapes.size() - 1; i >= 0; i--) {
-        // ask every shape if we clicked on it
-        if (shapes[i]->contains(mx, my)) {
-            std::cout << "Clicked on shape[" << i << "]" << std::endl;
-            result = shapes[i];
-            selectedShape = result; // Keep track of selected shape in Canvas
-            break;
+void Canvas::updateScribble(float x, float y, float r, float g, float b, int size) {
+    if (currentScribble) {
+        currentScribble->addPoint(x, y, r, g, b, size);
+    }
+}
+
+void Canvas::endScribble() {
+    if (currentScribble) {
+        shapes.push_back(currentScribble);
+        currentScribble = nullptr;
+    }
+}
+
+
+Shape* Canvas::getSelectedShape(float mx, float my) {
+    // Check shapes from top to bottom (reverse order)
+    for (auto it = shapes.rbegin(); it != shapes.rend(); ++it) {
+        if ((*it)->contains(mx, my)) {
+            selectedShape = *it;
+            return *it;
         }
     }
-    if (result == nullptr) {
-        std::cout << "No selected shape" << std::endl;
-        selectedShape = nullptr; // Clear selection
-    }
-    return result;
+    selectedShape = nullptr;
+    return nullptr;
 }

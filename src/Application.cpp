@@ -4,17 +4,46 @@
 using namespace bobcat;
 using namespace std;
 
-void Application::onCanvasMouseDown(bobcat::Widget* sender, float mx, float my) {
+void Application::eraseAtPosition(float mx, float my) {
+    Shape* shapeToErase = canvas->getSelectedShape(mx, my);
+    if (shapeToErase) {
+        canvas->removeShape(shapeToErase);
+        if (selectedShape == shapeToErase) {
+            selectedShape = nullptr;
+        }
+        canvas->redraw();
+    }
+}
+
+void Application::startScribble(float x, float y, float r, float g, float b) {
+    canvas->startScribble(x, y, Color(r, g, b));
+    isDrawingScribble = true;
+}
+
+void Application::continueScribble(float x, float y, float r, float g, float b, int size) {
+    if (isDrawingScribble) {
+        canvas->updateScribble(x, y, r, g, b, size);
+        canvas->redraw();
+    }
+}
+
+void Application::endScribble() {
+    if (isDrawingScribble) {
+        canvas->endScribble();
+        isDrawingScribble = false;
+        canvas->redraw();
+    }
+}
+
+void Application::onCanvasMouseDown(Widget* sender, float mx, float my) {
     TOOL tool = toolbar->getTool();
     Color color = colorSelector->getColor();
 
     if (tool == PENCIL) {
-        canvas->addPoint(mx, my, color.getR(), color.getG(), color.getB(), 10);
-        canvas->redraw();
+        startScribble(mx, my, color.getR(), color.getG(), color.getB());
     }
     else if (tool == ERASER) {
-        canvas->addPoint(mx, my, 1.0, 1.0, 1.0, 14);
-        canvas->redraw();
+        eraseAtPosition(mx, my);
     }
     else if (tool == RECTANGLE) {
         canvas->addRectangle(mx, my, color.getR(), color.getG(), color.getB());
@@ -24,73 +53,68 @@ void Application::onCanvasMouseDown(bobcat::Widget* sender, float mx, float my) 
         canvas->addCircle(mx, my, color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
-
     else if (tool == TRIANGLE) {
-        canvas->addTriangle(mx, my, color.getR(), color.getG(), color.getB());
+        canvas->addTriangle(mx, my, 0.2, 0.2, color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
-
     else if (tool == POLYGON) {
-        canvas->addPolygon(mx, my, color.getR(), color.getG(), color.getB());
+        canvas->addPolygon(mx, my, 5, 0.2, color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
     else if (tool == FRONT) {
-    selectedShape = canvas->getSelectedShape(mx, my);
-    if (selectedShape) {
-        canvas->bringToFront(selectedShape);
-        canvas->redraw();
+        selectedShape = canvas->getSelectedShape(mx, my);
+        if (selectedShape) {
+            canvas->bringToFront(selectedShape);
+            canvas->redraw();
         }
     }
     else if (tool == BACK) {
-    selectedShape = canvas->getSelectedShape(mx, my);
-    if (selectedShape) {
-        canvas->sendToBack(selectedShape);
-        canvas->redraw();
+        selectedShape = canvas->getSelectedShape(mx, my);
+        if (selectedShape) {
+            canvas->sendToBack(selectedShape);
+            canvas->redraw();
         }
     }
     else if (tool == MOUSE) {
         selectedShape = canvas->getSelectedShape(mx, my);
-        
         if (selectedShape) {
             isDragging = true;
             lastMouseX = mx;
             lastMouseY = my;
-            
-            canvas->take_focus();
         }
     }
 }
 
-void Application::onCanvasDrag(bobcat::Widget* sender, float mx, float my) {
+void Application::onCanvasDrag(Widget* sender, float mx, float my) {
     TOOL tool = toolbar->getTool();
     Color color = colorSelector->getColor();
 
     if (tool == PENCIL) {
-        canvas->addPoint(mx, my, color.getR(), color.getG(), color.getB(), 7);
-        canvas->redraw();
+        continueScribble(mx, my, color.getR(), color.getG(), color.getB(), 7);
     }
     else if (tool == ERASER) {
-        canvas->addPoint(mx, my, 1.0, 1.0, 1.0, 14);
-        canvas->redraw();
+        eraseAtPosition(mx, my);
     }
     else if (tool == MOUSE && isDragging && selectedShape) {
         float dx = mx - lastMouseX;
         float dy = my - lastMouseY;
-        
         selectedShape->move(dx, dy);
-        
         lastMouseX = mx;
         lastMouseY = my;
-        
         canvas->redraw();
     }
 }
 
-void Application::onCanvasMouseUp(bobcat::Widget* sender, float mx, float my) {
+void Application::onCanvasMouseUp(Widget* sender, float mx, float my) {
+    TOOL tool = toolbar->getTool();
+    
+    if (tool == PENCIL) {
+        endScribble();
+    }
     isDragging = false;
 }
 
-void Application::onToolbarChange(bobcat::Widget* sender) {
+void Application::onToolbarChange(Widget* sender) {
     ACTION action = toolbar->getAction();
 
     if (action == CLEAR) {
@@ -110,13 +134,11 @@ void Application::onToolbarChange(bobcat::Widget* sender) {
         canvas->undo();
         canvas->redraw();
     }
-
 }
 
-void Application::onColorSelectorChange(bobcat::Widget* sender) {
+void Application::onColorSelectorChange(Widget* sender) {
     Color color = colorSelector->getColor();
     if (selectedShape) {
-        cout << "Update selected shape color" << endl;
         selectedShape->setColor(color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
@@ -127,6 +149,7 @@ Application::Application() {
 
     selectedShape = nullptr;
     isDragging = false;
+    isDrawingScribble = false;
     lastMouseX = 0;
     lastMouseY = 0;
 

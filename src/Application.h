@@ -15,6 +15,7 @@ class Application : public bobcat::Application_ {
     Shape* selectedShape;
 
     bool isDragging;
+    bool isDrawingScribble;
     float lastMouseX;
     float lastMouseY;
 
@@ -23,6 +24,11 @@ class Application : public bobcat::Application_ {
     void onCanvasMouseUp(bobcat::Widget* sender, float mx, float my);
     void onToolbarChange(bobcat::Widget* sender);
     void onColorSelectorChange(bobcat::Widget* sender);
+
+    void eraseAtPosition(float mx, float my);
+    void startScribble(float x, float y, float r, float g, float b);
+    void continueScribble(float x, float y, float r, float g, float b, int size);
+    void endScribble();
 
 public:
     Application();
