@@ -35,7 +35,6 @@ void Triangle::draw() {
 
 
 bool Triangle::contains(float mx, float my) {
- 
     float x1 = x - base / 2.0f;
     float y1 = y - height / 2.0f;
 

@@ -4,37 +4,6 @@
 using namespace bobcat;
 using namespace std;
 
-void Application::eraseAtPosition(float mx, float my) {
-    Shape* shapeToErase = canvas->getSelectedShape(mx, my);
-    if (shapeToErase) {
-        canvas->removeShape(shapeToErase);
-        if (selectedShape == shapeToErase) {
-            selectedShape = nullptr;
-        }
-        canvas->redraw();
-    }
-}
-
-void Application::startScribble(float x, float y, float r, float g, float b) {
-    canvas->startScribble(x, y, Color(r, g, b));
-    isDrawingScribble = true;
-}
-
-void Application::continueScribble(float x, float y, float r, float g, float b, int size) {
-    if (isDrawingScribble) {
-        canvas->updateScribble(x, y, r, g, b, size);
-        canvas->redraw();
-    }
-}
-
-void Application::endScribble() {
-    if (isDrawingScribble) {
-        canvas->endScribble();
-        isDrawingScribble = false;
-        canvas->redraw();
-    }
-}
-
 void Application::onCanvasMouseDown(Widget* sender, float mx, float my) {
     TOOL tool = toolbar->getTool();
     Color color = colorSelector->getColor();
@@ -58,7 +27,7 @@ void Application::onCanvasMouseDown(Widget* sender, float mx, float my) {
         canvas->redraw();
     }
     else if (tool == POLYGON) {
-        canvas->addPolygon(mx, my, 5, 0.2, color.getR(), color.getG(), color.getB());
+        canvas->addPolygon(mx, my, 5, 0.1, color.getR(), color.getG(), color.getB());
         canvas->redraw();
     }
     else if (tool == FRONT) {
@@ -142,8 +111,39 @@ void Application::onColorSelectorChange(Widget* sender) {
     }
 }
 
+void Application::startScribble(float x, float y, float r, float g, float b) {
+    canvas->startScribble(x, y, Color(r, g, b));
+    isDrawingScribble = true;
+}
+
+void Application::continueScribble(float x, float y, float r, float g, float b, int size) {
+    if (isDrawingScribble) {
+        canvas->updateScribble(x, y, r, g, b, size);
+        canvas->redraw();
+    }
+}
+
+void Application::endScribble() {
+    if (isDrawingScribble) {
+        canvas->endScribble();
+        isDrawingScribble = false;
+        canvas->redraw();
+    }
+}
+
+void Application::eraseAtPosition(float mx, float my) {
+    Shape* shapeToErase = canvas->getSelectedShape(mx, my);
+    if (shapeToErase) {
+        canvas->removeShape(shapeToErase);
+        if (selectedShape == shapeToErase) {
+            selectedShape = nullptr;
+        }
+        canvas->redraw();
+    }
+}
+
 Application::Application() {
-    window = new Window(25, 75, 600, 650, "Paint App Project");
+    window = new Window(25, 75, 650, 650, "Paint App Project");
 
     selectedShape = nullptr;
     isDragging = false;
@@ -152,7 +152,7 @@ Application::Application() {
     lastMouseY = 0;
 
     toolbar = new Toolbar(0, 0, 50, 650);
-    canvas = new Canvas(50, 0, 550, 600);
+    canvas = new Canvas(50, 0, 600, 600);
     colorSelector = new ColorSelector(50, 600, 450, 50);
     colorSelector->box(FL_BORDER_BOX);
 
@@ -165,8 +165,6 @@ Application::Application() {
     ON_MOUSE_UP(canvas, Application::onCanvasMouseUp);
     ON_CHANGE(toolbar, Application::onToolbarChange);
     ON_CHANGE(colorSelector, Application::onColorSelectorChange);
-    
-    canvas->take_focus();
 
     window->show();
 }

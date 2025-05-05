@@ -40,26 +40,24 @@ void Canvas::removeShape(Shape* shape) {
         if (selectedShape == *it) {
             selectedShape = nullptr;
         }
-        delete *it; 
+        delete *it;  // Free memory
         shapes.erase(it);
     }
 }
 
 void Canvas::bringToFront(Shape* shape) {
     auto it = std::find(shapes.begin(), shapes.end(), shape);
-    if (it != shapes.end() && it != shapes.end() - 1) {
-        Shape* temp = *it;
+    if (it != shapes.end()) {
         shapes.erase(it);
-        shapes.push_back(temp);
+        shapes.push_back(shape);
     }
 }
 
 void Canvas::sendToBack(Shape* shape) {
     auto it = std::find(shapes.begin(), shapes.end(), shape);
-    if (it != shapes.end() && it != shapes.begin()) {
-        Shape* temp = *it;
+    if (it != shapes.end()) {
         shapes.erase(it);
-        shapes.insert(shapes.begin(), temp);
+        shapes.insert(shapes.begin(), shape);
     }
 }
 
@@ -96,13 +94,13 @@ void Canvas::render() {
         point->draw();
     }
     
-    // Draw shapes from back to front
+    // Draw shapes
     for (auto shape : shapes) {
         shape->draw();
     }
 }
 
-// Scribble operations
+// Scribble methods implementation
 void Canvas::startScribble(float startX, float startY, Color color) {
     currentScribble = new Scribble(startX, startY, color.getR(), color.getG(), color.getB());
 }
@@ -120,8 +118,9 @@ void Canvas::endScribble() {
     }
 }
 
-// Selection
+
 Shape* Canvas::getSelectedShape(float mx, float my) {
+    // Check shapes from top to bottom (reverse order)
     for (auto it = shapes.rbegin(); it != shapes.rend(); ++it) {
         if ((*it)->contains(mx, my)) {
             selectedShape = *it;

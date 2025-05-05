@@ -6,7 +6,7 @@
 Circle::Circle() {
     x = 0.0;
     y = 0.0;
-    radius = 0.2;
+    radius = 0.1;
     r = 0.0;
     g = 0.0;
     b = 0.0;
@@ -15,7 +15,7 @@ Circle::Circle() {
 Circle::Circle(float x, float y, float r, float g, float b) {
     this->x = x; 
     this->y = y; 
-    radius = 0.2;
+    radius = 0.1;
     this->r = r; 
     this->g = g; 
     this->b = b; 
@@ -33,7 +33,7 @@ void Circle::draw() {
 }
 
 bool Circle::contains(float mx, float my) {
-    float distance = sqrt(pow(mx - x, 2) + pow(my - y, 2));
+    float distance = sqrt(pow(mx - x, 2) + (pow(my - y, 2)));
     return distance <= radius;
 }
 
@@ -49,5 +49,5 @@ void Circle::move(float dx, float dy) {
 }
 
 void Circle::resize(float scaleX, float scaleY) {
-    radius *= (scaleX + scaleY) / 2.0f; 
+    radius *= (scaleX + scaleY) / 2.0; 
 }

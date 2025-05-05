@@ -7,7 +7,7 @@ Polygon::Polygon() {
     x = 0.0;
     y = 0.0;
     sides = 5;
-    length = 0.2;
+    length = 0.12;
     r = 0.0;
     g = 0.0;
     b = 0.0;
@@ -28,11 +28,14 @@ void Polygon::draw() {
     
     glBegin(GL_POLYGON);
         float inc = 2 * M_PI / sides;
+        float offset = (sides == 5) ? M_PI/2 : 0; 
         for (float theta = 0; theta <= 2 * M_PI; theta += inc) {
-            glVertex2f(x + length * cos(theta), y + length * sin(theta));
+            glVertex2f(x + length * cos(theta + offset), 
+                      y + length * sin(theta + offset));
         }
     glEnd();
 }
+
 bool Polygon::contains(float mx, float my) {
     float distance = sqrt(pow(mx - x, 2) + pow(my - y, 2));
     
