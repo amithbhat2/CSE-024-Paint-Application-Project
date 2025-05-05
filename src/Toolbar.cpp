@@ -75,6 +75,12 @@ void Toolbar::onClick(bobcat::Widget* sender) {
     else if (sender == decreaseButton) {
         action = DECREASE;
     }
+    else if (sender == frontButton) {
+        tool = FRONT;
+    }
+    else if (sender == backButton) {
+        tool = BACK;
+    }
     else if (sender == undoButton) {
         action = UNDO;
     }

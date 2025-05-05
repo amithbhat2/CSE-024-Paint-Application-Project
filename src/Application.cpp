@@ -62,16 +62,14 @@ void Application::onCanvasMouseDown(Widget* sender, float mx, float my) {
         canvas->redraw();
     }
     else if (tool == FRONT) {
-        selectedShape = canvas->getSelectedShape(mx, my);
-        if (selectedShape) {
-            canvas->bringToFront(selectedShape);
+        if (Shape* shape = canvas->getSelectedShape(mx, my)) {
+            canvas->bringToFront(shape);
             canvas->redraw();
         }
     }
     else if (tool == BACK) {
-        selectedShape = canvas->getSelectedShape(mx, my);
-        if (selectedShape) {
-            canvas->sendToBack(selectedShape);
+        if (Shape* shape = canvas->getSelectedShape(mx, my)) {
+            canvas->sendToBack(shape);
             canvas->redraw();
         }
     }
