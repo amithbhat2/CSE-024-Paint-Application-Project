@@ -36,11 +36,10 @@ void Canvas::addPolygon(float x, float y, int sides, float length, float r, floa
 void Canvas::removeShape(Shape* shape) {
     auto it = std::find(shapes.begin(), shapes.end(), shape);
     if (it != shapes.end()) {
-        // Clear selection if this was the selected shape
         if (selectedShape == *it) {
             selectedShape = nullptr;
         }
-        delete *it;  // Free memory
+        delete *it; 
         shapes.erase(it);
     }
 }
@@ -73,13 +72,11 @@ int Canvas::handle(int event) {
 }
 
 void Canvas::clear() {
-    // Clear points
     for (auto point : points) {
         delete point;
     }
     points.clear();
     
-    // Clear shapes
     for (auto shape : shapes) {
         delete shape;
     }
@@ -89,18 +86,15 @@ void Canvas::clear() {
 }
 
 void Canvas::render() {
-    // Draw points
     for (auto point : points) {
         point->draw();
     }
     
-    // Draw shapes
     for (auto shape : shapes) {
         shape->draw();
     }
 }
 
-// Scribble methods implementation
 void Canvas::startScribble(float startX, float startY, Color color) {
     currentScribble = new Scribble(startX, startY, color.getR(), color.getG(), color.getB());
 }
@@ -120,7 +114,6 @@ void Canvas::endScribble() {
 
 
 Shape* Canvas::getSelectedShape(float mx, float my) {
-    // Check shapes from top to bottom (reverse order)
     for (auto it = shapes.rbegin(); it != shapes.rend(); ++it) {
         if ((*it)->contains(mx, my)) {
             selectedShape = *it;

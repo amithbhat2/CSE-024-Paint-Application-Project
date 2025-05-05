@@ -29,7 +29,7 @@ bool Scribble::contains(float mx, float my) {
     for (auto point : points) {
         float dx = point->getX() - mx;
         float dy = point->getY() - my;
-        if (dx*dx + dy*dy < 0.0025f) { // 0.05^2 threshold
+        if (dx*dx + dy*dy < 0.0025f) {
             return true;
         }
     }
