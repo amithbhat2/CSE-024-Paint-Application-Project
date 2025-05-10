@@ -34,14 +34,8 @@ void Canvas::addPolygon(float x, float y, int sides, float length, float r, floa
 }
 
 void Canvas::removeShape(Shape* shape) {
-    auto it = std::find(shapes.begin(), shapes.end(), shape);
-    if (it != shapes.end()) {
-        if (selectedShape == *it) {
-            selectedShape = nullptr;
-        }
-        delete *it; 
-        shapes.erase(it);
-    }
+    shapes.erase(std::remove(shapes.begin(), shapes.end(), shape), shapes.end());
+    delete shape;
 }
 
 void Canvas::bringToFront(Shape* shape) {
@@ -99,9 +93,9 @@ void Canvas::startScribble(float startX, float startY, Color color) {
     currentScribble = new Scribble(startX, startY, color.getR(), color.getG(), color.getB());
 }
 
-void Canvas::updateScribble(float x, float y, float r, float g, float b, int size) {
+void Canvas::updateScribble(float x, float y, Color color) {
     if (currentScribble) {
-        currentScribble->addPoint(x, y, r, g, b, size);
+        currentScribble->addPoint(x, y, color.getR(), color.getG(), color.getB(), 5);
     }
 }
 
@@ -111,7 +105,6 @@ void Canvas::endScribble() {
         currentScribble = nullptr;
     }
 }
-
 
 Shape* Canvas::getSelectedShape(float mx, float my) {
     for (auto it = shapes.rbegin(); it != shapes.rend(); ++it) {

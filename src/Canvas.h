@@ -35,7 +35,7 @@ public:
     void resizeSelectedShape(Shape* shape, float scaleX, float scaleY);
     
     void startScribble(float startX, float startY, Color color);
-    void updateScribble(float x, float y, float r, float g, float b, int size);
+    void updateScribble(float x, float y, Color color);
     void endScribble();
     
     void undo();

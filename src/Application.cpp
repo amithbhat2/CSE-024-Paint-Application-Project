@@ -9,7 +9,7 @@ void Application::onCanvasMouseDown(Widget* sender, float mx, float my) {
     Color color = colorSelector->getColor();
 
     if (tool == PENCIL) {
-        startScribble(mx, my, color.getR(), color.getG(), color.getB());
+        startScribble(mx, my, color);
     }
     else if (tool == ERASER) {
         eraseAtPosition(mx, my);
@@ -57,7 +57,7 @@ void Application::onCanvasDrag(Widget* sender, float mx, float my) {
     Color color = colorSelector->getColor();
 
     if (tool == PENCIL) {
-        continueScribble(mx, my, color.getR(), color.getG(), color.getB(), 7);
+        continueScribble(mx, my, color);
     }
     else if (tool == ERASER) {
         eraseAtPosition(mx, my);
@@ -111,14 +111,14 @@ void Application::onColorSelectorChange(Widget* sender) {
     }
 }
 
-void Application::startScribble(float x, float y, float r, float g, float b) {
-    canvas->startScribble(x, y, Color(r, g, b));
+void Application::startScribble(float x, float y, Color color) {
+    canvas->startScribble(x, y, color);
     isDrawingScribble = true;
 }
 
-void Application::continueScribble(float x, float y, float r, float g, float b, int size) {
+void Application::continueScribble(float x, float y, Color color) {
     if (isDrawingScribble) {
-        canvas->updateScribble(x, y, r, g, b, size);
+        canvas->updateScribble(x, y, color);
         canvas->redraw();
     }
 }
@@ -135,9 +135,7 @@ void Application::eraseAtPosition(float mx, float my) {
     Shape* shapeToErase = canvas->getSelectedShape(mx, my);
     if (shapeToErase) {
         canvas->removeShape(shapeToErase);
-        if (selectedShape == shapeToErase) {
-            selectedShape = nullptr;
-        }
+        selectedShape = nullptr;
         canvas->redraw();
     }
 }

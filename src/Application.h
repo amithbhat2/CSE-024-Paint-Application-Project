@@ -26,14 +26,12 @@ class Application : public bobcat::Application_ {
     void onColorSelectorChange(bobcat::Widget* sender);
 
     void eraseAtPosition(float mx, float my);
-    void startScribble(float x, float y, float r, float g, float b);
-    void continueScribble(float x, float y, float r, float g, float b, int size);
+    void startScribble(float x, float y, Color color);
+    void continueScribble(float x, float y, Color color);
     void endScribble();
 
 public:
     Application();
-
-    friend struct AppTest;
 };
 
 #endif
